@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.vendor.company_name }}{% endblock %}
+
+{% block content %}
+
+{% include 'partials/_alerts.html' %}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card bg-light">
+                <article class="p-4 text-center">
+                    {% if user.vendor.image %}
+                    <img src="{{ user.vendor.image.url }}" class="img-fluid">
+                    {% endif %}
+                    <h4 class="card-title mt-3">{{ user.vendor.company_name }} <small><i class="fa fa-check text-primary"></i></small></h4>
+                    <p>{{ user.vendor.about }}</p>
+                    <hr>
+                    <p class="text-muted"> <i class="fa fa-map-marker"></i> {{ user.vendor.address }}, {{ user.vendor.state }}
+                    </p>
+                    <hr>
+                    <a href="mailto:{{ user.email }}" class="btn btn-warning"><i class="fa fa-envelope-o"></i> Send mail </a> 
+                    <a href="tel:{{ user.vendor.phone_number }}" class="btn btn-success"> <i class="fa fa-phone"></i> Make a call </a> 
+                </article>
+            </div>
+        </div>
+        
+        <main class="col-md-8">
+            <header class="border-bottom mb-4 pb-3">
+                <span class="mr-md-auto"><b>{{ product_count }}</b> product{{ product_count|pluralize }}</span>
+            </header>
+            {% for product in products %}
+                {% include "partials/_products_list.html" %}
+            {% empty %}
+                <p>This vendor has no product on sale yet.</p>
+            {% endfor %}
+            {% include "partials/_pagination.html" with page_obj=products %}
+        </main>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+<script type="text/javascript">
+    var addCartBtns = document.getElementsByClassName("add-cart")
+    for (var i = 0; i < addCartBtns.length; i++) {
+        addCartBtns[i].addEventListener('click', function(){
+            var productId = this.dataset.product
+            var action = this.dataset.action
+            console.log('productId:', productId, 'Action:', action)
+        })
+    }
+</script>
+
+{% endblock %}

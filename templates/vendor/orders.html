@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Orders{% endblock %}
+
+{% block content %}
+
+{% include 'partials/_alerts.html' %}
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            {% include "partials/_vendor_nav.html" %}
+            <main class="col-lg-9">
+                <div class="mb-3 d-flex justify-content-between"> 
+                    <h3>Customer orders ({{ orders_count }})</h3>
+                    <span>Balance: {{ vendor.get_balance }} | Paid amount: {{ vendor.get_paid_amount }}</span>
+                </div>
+                {% for order in orders %}
+                    {% include "partials/_order_card.html" %}
+                {% empty %}
+                    <p>There are currently no orders from customers.</p>
+                {% endfor %}
+            </main>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

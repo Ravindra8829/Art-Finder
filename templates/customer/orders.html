@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+
+{% include 'partials/_alerts.html' %}
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            {% include "partials/_customer_nav.html" %}
+            <main class="col-lg-9">
+                <h5 class="mb-3"> Your orders ({{ orders_count }})</h5>
+                {% for order in orders %}
+                    {% include "partials/_order_card.html" %}
+                {% empty %}
+                    <p>You currently have no orders.</p>
+                {% endfor %}
+            </main>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

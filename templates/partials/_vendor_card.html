@@ -1,0 +1,16 @@
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="itemside mb-4">
+            <div class="aside"> 
+                <img src="{{ vendor.image.url }}" width="60" height="60" class="img-sm img-thumbnail"> 
+            </div>
+            <div class="info"> 
+                <span class="h6 title">{{ vendor.company_name }} {% if vendor.is_verified %}<i class="fa fa-check text-primary"></i>{% endif %}</span>
+                <small class="text-muted">Selling {{ vendor.user.products.count }} product{{ vendor.user.products.count|pluralize }}</small>
+                <p><i class="fa fa-map-marker"></i> {{ vendor.address }}, {{ vendor.state }}</p>
+            </div>
+        </div>
+        <p>{{ vendor.vendor.about|truncatechars:280 }}</p>
+        <a href="{% url 'accounts:vendor_profile' vendor.user.username %}" class="btn w-100 btn-outline-primary">Visit store</a>
+    </div>
+</div>

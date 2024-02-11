@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Order successful{% endblock %}
+
+{% block content %}
+
+<section class="py-3 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <article class="card my-4">
+                    <div class="card-body mb-4">
+                        <div class="mt-4 mx-auto text-center"> 
+                            <svg width="96px" height="96px" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="round-check"> <circle id="Oval" fill="#D3FFD9" cx="48" cy="48" r="48"></circle> <circle id="Oval-Copy" fill="#87FF96" cx="48" cy="48" r="36"></circle> <polyline id="Line" stroke="#04B800" stroke-width="4" stroke-linecap="round" points="34.188562 49.6867496 44 59.3734993 63.1968462 40.3594229"></polyline> </g> </g> </svg>
+                            <div class="my-3">
+                                <h4>Thank you for your order</h4>
+                                <p>Your order has been successfully completed. Your order number is <strong>{{ order.id }}</strong>.</p>
+                            </div>
+                        </div>
+                        <ul class="list-unstyled steps-wrap m-0 p-0 mt-5 position-relative d-flex mx-auto">
+                            <li class="w-100 text-center position-relative flex-grow-1 lh-base step active"> 
+                                <span class="icon">1</span> 
+                                <span class="text-muted d-block pt-2 text-center">Order received</span> 
+                            </li>
+                            <li class="w-100 text-center position-relative flex-grow-1 lh-base step "> 
+                                <span class="icon">2</span> 
+                                <span class="text-muted d-block pt-2 text-center">Confirmation</span> 
+                            </li>
+                            <li class="w-100 text-center position-relative flex-grow-1 lh-base step "> 
+                                <span class="icon">3</span> 
+                                <span class="text-muted d-block pt-2 text-center">Delivery</span> 
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

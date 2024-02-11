@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Result for "{{ keyword }}"{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+	<h2>Search Result for "{{ keyword }}"</h2>
+</div>
+
+<div class="container">
+	<div class="row">
+
+
+		<main class="col-lg-9">
+
+			<header class="border-bottom mb-4 pb-3">
+				<span class="mr-md-auto"><b>{{ product_count }}</b> product{{ product_count|pluralize }} found </span>
+			</header>
+
+			<div class="row">
+				{% if products %}
+					{% for product in products %}
+						<div class="col-lg-4 col-sm-6 col-12">
+							<div class="card card-product-grid">
+								<div class="img-wrap"> 
+									<img src="{{ product.image.url }}"> 
+								</div>
+								<div class="info-wrap border-top">
+									<div class="price-wrap"> 
+										<strong class="price">&#8358;{{ product.price }}</strong> 
+									</div>
+									<p class="title mb-2"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></p> 
+									<a href="#" class="btn btn-primary">Add to cart</a> <a href="#" class="btn btn-outline-primary btn-icon"> <i class="fa fa-heart"></i> </a> 
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<div>
+						<h2>No result found. Please try again.</h2>
+					</div>
+				{% endif %}
+			</div>
+			{% include "partials/_pagination.html" with page_obj=products %}
+		</main>
+	</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+<article class="card card-product-list">
+    <div class="row g-0">
+        <aside class="col-xl-3 col-md-4"> 
+            <a href="{% url 'products:detail' product.slug %}" class="img-wrap">
+                {% if product.image %}
+                <img src="{{ product.image.url }}"> 
+                {% endif %}
+            </a> 
+        </aside>
+        <div class="col-xl-9 col-md-8 border-start">
+            <div class="card-body">
+                <button class="btn btn-light btn-icon float-end add-cart" data-product="{{ product.id }}" data-action="add"><i class="fa fa-shopping-cart"></i></button>
+                <h5><a href="{% url 'products:detail' product.slug %}" class="title mb-2">{{ product.name }}</a></h5>
+                <div class="price-wrap me-3">
+                    <span class="price">&#8358;{{ product.price|floatformat:2 }}</span>
+                </div>
+                <div class="rating-wrap mb-2">
+                    <div class="rating-star">
+                        <span>
+                            <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1%}-half-o{% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 1.5 %}-o{% elif product.average_review >= 1.5 and product.average_review < 2%}-half-o{% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 2.5 %}-o{% elif product.average_review >= 2.5 and product.average_review < 3%}-half-o{% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4%}-half-o{% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5%}-half-o{% endif %}" aria-hidden="true"></i>
+                            <span>{{ product.count_review }} review{{ product.count_review|pluralize }}</span>
+                        </span>
+                    </div> 
+                </div>
+                
+                <p class="text-muted">{{ product.description|truncatechars:140 }}</p>
+                <p class="my-2">
+                    <span class="tag"><a href="{{ product.category.get_absolute_url }}" class="title">{{ product.category }}</a></span>
+                </p>
+                 
+            </div>
+        </div>
+    </div>
+</article>

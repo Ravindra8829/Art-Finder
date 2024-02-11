@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}My Products{% endblock %}
+
+{% block content %}
+
+{% include 'partials/_alerts.html' %}
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            {% include "partials/_vendor_nav.html" %}
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">My Products</h5>
+                        <hr>
+                        {% for product in products %}
+                        <article class="row gy-2 align-items-center mb-3">
+                            <div class="col-xl-4 col-sm-6">
+                                <div class="itemside align-items-center">
+                                    <div class="aside"> 
+                                        <img src="{{ product.image.url }}" class="img-sm img-thumbnail"> 
+                                    </div>
+                                    <div class="info"> 
+                                        <h6>{{ product.name }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-sm-6"> 
+                                <span>
+                                    <a href="{% url 'products:update' product.id %}" class="btn btn-outline-info">Edit</a>
+                                </span> 
+                                <span>
+                                    <a href="{% url 'products:delete' product.id %}" class="btn btn-outline-danger">Delete</a>
+                                </span> 
+                            </div>
+                            <div class="col-md-4 d-flex justify-content-lg-end">
+                                <div> 
+                                    <span class="price h6 me-4">&#8358;{{ product.price }}</span> 
+                                    <a href="{{ product.get_absolute_url }}" class="btn btn-primary">View</a> 
+                                </div>
+                            </div>
+                        </article>
+                        <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

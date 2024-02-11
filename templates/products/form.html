@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if create %}Upload{% else %}Update{% endif %} Product{% endblock %}
+
+{% block content %}
+
+{% include 'partials/_alerts.html' %}
+
+<section class="py-3 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 mx-auto">
+                <div class="card my-4 p-3">
+                    <article class="card-body">
+                        <h4 class="mb-4">{% if create %}Upload{% else %}Update{% endif %} Product</h4>
+                        <form method="post" action="" novalidate enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% include "partials/_form_errors.html" %}
+                            {{ form.as_p }}
+                            <div class="row mt-3 mb-4 align-items-center">
+                                <div class="col-auto"> 
+                                    <button class="btn btn-success" type="submit">Submit</button>
+                                </div>
+                                <div class="col-auto"> 
+                                    <a href="{% url 'home' %}" class="btn btn-outline-danger">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

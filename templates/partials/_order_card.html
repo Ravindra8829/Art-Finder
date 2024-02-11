@@ -1,0 +1,112 @@
+<article class="card mb-3">
+    <div class="card-body p-4">
+        <header class="d-lg-flex">
+            <div class="flex-grow-1">
+                <h6 class="mb-0">
+                    Order ID: {{ order.id }} &bull;
+                    <span class="text-success">{{ order.get_status_display }}</span>
+                </h6>
+                <span class="text-muted">Date: {{ order.created|date:"j F Y" }}</span> |
+                <span class="text-muted">{% if order.fully_paid %}Paid{% endif %}</span>
+            </div>
+            {% if not request.user.is_vendor %}
+            <div>
+                <a href="{% url 'orders:track_order' order.id %}" class="btn btn-sm btn-primary">Track order</a>
+            </div>
+            {% else %}
+            <div class="float-lg-end d-flex mb-3">
+                <div class="dropdown btn btn-light btn-sm float-end"> 
+                    <a href="#" data-bs-toggle="dropdown" aria-expanded="false" id="moreOptions"><i class="fa fa-ellipsis-v"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreOptions">
+                        <!-- <li><a class="dropdown-item {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Completed' %}disabled{% endif %}" href="{% url 'orders:order_status_processing' order.id %}">Order Processing</a></li>                        
+                        <li><a class="dropdown-item {% if order.status == 'Shipped' or order.status == 'Completed' %}disabled{% endif %}" href="{% url 'orders:order_status_shipped' order.id %}">Order Shipped</a></li>
+                        <li><a class="dropdown-item {% if order.status == 'Completed' %}disabled{% endif %}" href="{% url 'orders:order_status_completed' order.id %}">Order Completed</a></li> -->
+
+                        {% if order.status == 'Created' %}
+                        <li><a class="dropdown-item" href="{% url 'orders:order_status_processing' order.id %}">Order Processing</a></li>
+                        <li><a class="dropdown-item disabled" href="{% url 'orders:order_status_shipped' order.id %}">Order Shipped</a></li>
+                        <li><a class="dropdown-item disabled" href="{% url 'orders:order_status_completed' order.id %}">Order Completed</a></li>
+                        
+                        {% elif order.status == 'Processing' %}
+                        <li><a class="dropdown-item disabled" href="{% url 'orders:order_status_processing' order.id %}">Order Processing</a></li>
+                        <li><a class="dropdown-item" href="{% url 'orders:order_status_shipped' order.id %}">Order Shipped</a></li>
+                        <li><a class="dropdown-item disabled" href="{% url 'orders:order_status_completed' order.id %}">Order Completed</a></li>
+
+                        {% elif order.status == 'Shipped' %}
+                        <li><a class="dropdown-item disabled" href="{% url 'orders:order_status_processing' order.id %}">Order Processing</a>
+                        </li>
+                        <li><a class="dropdown-item disabled" href="{% url 'orders:order_status_shipped' order.id %}">Order Shipped</a></li>
+                        <li><a class="dropdown-item" href="{% url 'orders:order_status_completed' order.id %}">Order Completed</a></li>
+
+                        {% elif order.status == 'Completed' %}
+                        <li><a class="dropdown-item disabled" href="{% url 'orders:order_status_processing' order.id %}">Order Processing</a>
+                        </li>
+                        <li><a class="dropdown-item disabled" href="{% url 'orders:order_status_shipped' order.id %}">Order Shipped</a></li>
+                        <li><a class="dropdown-item disabled" href="{% url 'orders:order_status_completed' order.id %}">Order Completed</a></li>
+
+                        {% endif %}
+                        
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </header>
+        <hr>
+        <div class="row">
+            <div class="col-lg-4">
+                <p class="mb-0 text-muted">Contact</p>
+                <p class="m-0">
+                    {{ order.first_name }} {{ order.last_name }} <br> Phone: {{ order.phone_number }} <br> Email: {{ order.user.email }} </p>
+            </div>
+            <div class="col-lg-4 border-start">
+                <p class="mb-0 text-muted">Shipping address</p>
+                <p class="m-0"> {{ order.city }}, <br> {{ order.address }} </p>
+            </div>
+            <div class="col-lg-4 border-start">
+                <p class="mb-0 text-muted">Payment</p>
+                <p class="m-0">
+                    <span class="text-success"> Visa  **** 4216   </span> <br> Shipping fee: &#8358;0 <br> Total paid: &#8358;{{ order.get_total_cost }}
+                </p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <ul class="steps-wrap mx-auto">
+                <li class="step {% if order.status == 'Created' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Completed' %}active{% endif %}"> 
+                    <span class="icon">1</span> 
+                    <span class="text">Order created</span> 
+                </li>
+                <li class="step {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Completed' %}active{% endif %}"> 
+                    <span class="icon">2</span> 
+                    <span class="text">Order processed</span> 
+                </li>
+                <li class="step {% if order.status == 'Shipped' or order.status == 'Completed' %}active{% endif %}"> 
+                    <span class="icon">3</span> 
+                    <span class="text">Order shipped</span> 
+                </li>
+                <li class="step {% if order.status == 'Completed' %}active{% endif %}"> 
+                    <span class="icon">4</span> 
+                    <span class="text">Order completed</span> 
+                </li>
+            </ul>
+        </div>
+        <hr>
+        <ul class="row">
+            {% for item in order.items.all %}
+            {% if item.vendor == vendor %}
+            <li class="col-lg-4">
+                <figure class="itemside mb-3">
+                    <div class="aside">
+                        <img width="72" height="72" src="{{ item.product.image.url }}" class="img-sm rounded border">
+                    </div>
+                    <figcaption class="info">
+                        <p class="title">{{ item.product.name }}</p>
+                        <strong> {{ item.quantity }}x = &#8358;{{ item.price }} </strong>
+                    </figcaption>
+                </figure>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</article>

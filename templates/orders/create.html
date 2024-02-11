@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+
+{% include 'partials/_alerts.html' %}
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <main class="col-lg-8">
+                {% if not request.user.is_authenticated %}
+                <article class="card mb-4">
+                    <div class="card-body p-4">
+                        <div class="float-end">
+                            <a href="{% url 'accounts:customer_signup' %}?next={% url 'orders:create' %}" class="btn btn-outline-info">Register</a>
+                            <a href="{% url 'accounts:login' %}?next={% url 'orders:create' %}" class="btn btn-outline-primary">Login</a>
+                        </div>
+                        <h5>Have an account?</h5>
+                        <p class="mb-0">Login and make use of your saved address and track your order.</p>
+                    </div>
+                </article>
+                {% endif %}
+                <article class="card">
+                    <form method="post" action="" novalidate>
+                        {% csrf_token %}
+                        <div class="card-body p-4">
+                            <h5 class="mb-4">{% if not request.user.is_authenticated %}Guest {% endif %} Checkout</h5>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label for="id_first_name" class="form-label">First name</label>
+                                    {{ form.first_name }}
+                                </div>
+                                <div class="col-6">
+                                    <label for="id_last_name" class="form-label">Last name</label>
+                                    {{ form.last_name }}
+                                </div>
+                                <div class="col-sm-8 mb-3">
+                                    <label for="id_address" class="form-label">Address</label>
+                                    {{ form.address }}
+                                </div>
+                                <div class="col-sm-4 col-6 mb-3">
+                                    <label for="id_postal_code" class="form-label">Postal code</label>
+                                    {{ form.postal_code }}
+                                </div>
+                                <div class="col-3 mb-3">
+                                    <label for="id_city" class="form-label">City</label>
+                                    {{ form.city }}
+                                </div>
+                                <div class="col-9 mb-3">
+                                    <label for="id_email" class="form-label">Email</label>
+                                    {{ form.email }}
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="float-end mb-4">
+                                <a href="{% url 'carts:cart_detail' %}" class="btn btn-light">Cancel</a>
+                                <button type="submit" class="btn btn-success">Continue</button>
+                            </div>
+                        </div>
+                    </form>
+                </article>
+            </main>
+            
+            <aside class="col-lg-4">
+                <article class="ms-lg-4 mt-4 mt-lg-0">
+                    <h6 class="card-title">Summary</h6>
+
+                    <dl class="d-flex">
+                        <dt class="fw-normal">Total price:</dt>
+                        <dd class="text-end flex-grow-1 mb-0">&#8358;{{ cart.get_total_price }}</dd>
+                    </dl>
+                    <hr>
+                    <dl class="d-flex">
+                        <dt class="fw-normal"> Total: </dt>
+                        <dd class="text-end flex-grow-1 mb-0 h6">&#8358;{{ cart.get_total_price }}</dd>
+                    </dl>
+
+                    <hr>
+                    <h6 class="mb-4">Items in cart</h6>
+                    {% for item in cart %}
+                    <figure class="position-relative d-flex w-100 align-items-center mb-4">
+                        <div class="position-relative flex-shrink-0">
+                            <b class="badge bg-secondary rounded-pill position-absolute top-0 start-100 translate-middle">{{ item.quantity }}</b>
+                            <img src="{{ item.product.image.url }}" class="img-sm rounded border">
+                        </div>
+                        <figcaption class="flex-grow-1 ps-3">
+                            <a href="{{ item.get_absolute_url }}" class="text-decoration-none">{{ item.product.name }}</a>
+                            <div class="text-muted">Total: &#8358;{{ item.total_price }}</div>
+                        </figcaption>
+                    </figure>
+                    {% endfor %}
+                </article>
+            </aside>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign up as {{ user_type }}{% endblock %}
+
+{% block content %}
+
+{% include 'partials/_alerts.html' %}
+
+<section class="py-3 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mx-auto">
+                <div class="card my-4 p-3">
+                    <div class="card-body">
+                        <h4 class="mb-4">Create {{ user_type }} account</h4>
+                        <form method="post" action="" novalidate>
+                            {% csrf_token %}
+                            {% include 'partials/_form_errors.html' %}
+                            <div class="mb-3">
+                                <label class="form-label" for="id_username">Username:</label>
+                                <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" placeholder="Enter your username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" required id="id_username" {% if form.username.value != None %}value="{{ form.username.value|stringformat:'s' }}"{% endif %}>
+                                {% for error in form.username.errors %}
+                                <div class="invalid-feedback">
+                                    {{ error }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="id_email">Email:</label>
+                                <input type="email" name="email" placeholder="Enter your email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" required id="id_email" {% if form.email.value != None %}value="{{ form.email.value|stringformat:'s' }}"{% endif %}>
+                                {% for error in form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {{ error }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-3"> 
+                                <label for="id_password1" class="form-label">Password:</label> 
+                                <input type="password" name="password1" autocomplete="new-password" required id="id_password1" class="form-control {% if form.password1.errors %}is-invalid{% endif %}" placeholder="******">
+        						{% for error in form.password1.errors %}
+                                <div class="invalid-feedback">
+                                    {{ error }}
+                                </div>
+        						{% endfor %}
+                            </div>
+                            <div class="mb-3"> 
+                                <label for="id_password2" class="form-label">Confirm password:</label> 
+                                <input type="password" name="password2" autocomplete="new-password" required id="id_password2" class="form-control {% if form.password2.errors %}is-invalid{% endif %}" placeholder="******">
+        						{% for error in form.password2.errors %}
+                                <div class="invalid-feedback">
+                                    {{ error }}
+                                </div>
+        						{% endfor %}
+                            </div>
+                            <div class="row mt-3 mb-4">
+                                <div class="col-auto"> 
+                                    <button class="btn btn-success" type="submit" id="signup" disabled>Register now</button> 
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <p class="mb-0">Already have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let inputs = document.querySelectorAll('input');
+    let signupButton = document.getElementById('signup');
+
+    let inputValidator = {
+        "username": false,
+        "email": false,
+        "password1": false,
+        "password2": false,
+    }
+
+    inputs.forEach((input) => {
+        input.addEventListener('input', () => {
+            let name = event.target.getAttribute('name');
+            if (event.target.value.length > 0) {
+                inputValidator[name] = true;
+            } else {
+                inputValidator[name] = false;
+            };
+
+            let allTrue = Object.keys(inputValidator).every((item) => {
+                return inputValidator[item] === true
+            });
+
+            if (allTrue) {
+                signupButton.disabled = false;
+            } else {
+                signupButton.disabled = true;
+            }
+        })
+    })
+</script>
+{% endblock %}

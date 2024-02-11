@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Track Order: {{ order.id }}{% endblock %}
+
+{% block content %}
+
+<section class="py-3 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <article class="card my-4">
+                    <div class="card-body mb-4">
+                        <a class="btn btn-light" href="{% url 'accounts:orders' %}">&laquo; Go back</a>
+                        <div class="mt-4 mx-auto text-center"> 
+                            <div class="my-3">
+                                <h4>Track your order</h4>
+                                <p>Below is the status of your order #<strong>{{ order.id }}</strong>.</p>
+                            </div>
+                        </div>
+                        <ul class="steps-wrap mx-auto">
+                            <li class="step {% if order.status == 'Created' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Completed' %}active{% endif %}"> 
+                                <span class="icon">1</span> 
+                                <span class="text">Order created</span> 
+                            </li>
+                            <li class="step {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Completed' %}active{% endif %}"> 
+                                <span class="icon">2</span> 
+                                <span class="text">Order processed</span> 
+                            </li>
+                            <li class="step {% if order.status == 'Shipped' or order.status == 'Completed' %}active{% endif %}"> 
+                                <span class="icon">3</span> 
+                                <span class="text">Order shipped</span> 
+                            </li>
+                            <li class="step {% if order.status == 'Completed' %}active{% endif %}"> 
+                                <span class="icon">4</span> 
+                                <span class="text">Order completed</span> 
+                                <span class="text {% if order.status == 'Completed' %}fw-bold{% endif %}">(Order to be delivered on {{ order.delivery_date|date:"F j, Y" }})</span>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

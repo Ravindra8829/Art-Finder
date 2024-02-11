@@ -1,0 +1,30 @@
+<div class="col-lg-3 col-sm-6 col-12">
+    <figure class="card card-product-grid">
+        <div class="img-wrap">
+            <img src="{{ product.image.url }}">
+        </div>
+        <figcaption class="info-wrap"> 
+            <!-- <small class="text-muted"><a href="#" class="title">{{ product.vendor.vendor.company_name }}</a></small> -->
+            <p class="title"><a href="{{ product.get_absolute_url }}" class="text-decoration-none">{{ product.name }}</a></p>
+            <div class="rating-wrap">
+                <div class="rating-star">
+                    <span>
+                        <i class="fa-solid fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1%}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.average_review < 1.5 %}-o{% elif product.average_review >= 1.5 and product.average_review < 2%}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.average_review < 2.5 %}-o{% elif product.average_review >= 2.5 and product.average_review < 3%}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4%}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5%}-half-o{% endif %}" aria-hidden="true"></i>
+                    </span> 
+                    <span class="label-rating text-warning">{{ product.average_review }}</span> 
+                </div>
+            </div>
+        </figcaption>
+        <div class="bottom-wrap"> 
+            <a href="javascript:void(0)" class="btn btn-primary float-end add-cart" data-product="{{ product.id }}" data-action="add"><i class="fa fa-shopping-cart"></i></a>
+            <div class="price-wrap lh-sm"> 
+                <strong class="price">&#8358;{{ product.price }}</strong>
+                <!-- <small class="text-danger">{% if product.units <= 0 %}Out of Stock{% endif %}</small>  -->
+            </div>
+        </div>
+    </figure>
+</div>

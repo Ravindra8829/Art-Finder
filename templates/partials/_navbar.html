@@ -1,0 +1,76 @@
+<header>
+    <section class="py-3 border-bottom">
+        <div class="container">
+            <div class="row g-3 align-items-center">
+                <div class="col-lg-2 col-sm-3 col-4"> 
+                    <h3 class="m-0 p-0"><a class="link-info text-decoration-none" href="{% url 'home' %}">ArtFinder</a></h3>
+                </div>
+                <div class="col-lg-5 col-sm-5 col-8">
+                    <form action="{% url 'products:search' %}" method="get" class="me-3">
+                        <div class="input-group"> 
+                            <input type="search" class="form-control" placeholder="Search" name="keyword" value="{{ request.GET.keyword }}"> 
+                            <button class="input-group-text btn btn-light" type="submit"> <i class="fa fa-search"></i> </button> 
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-5 col-sm-4 col-12">
+                    <div class="float-md-end">
+                        <div class="d-inline-block position-relative align-middle me-2">
+                            {% if not request.user.is_vendor %}
+                                {% with total_items=cart|length %}
+                                <a href="{% url 'carts:cart_detail' %}" class="btn btn-light position-relative"> 
+                                    <i class="fa fa-shopping-cart"></i> 
+                                    <span class="ms-1">Cart </span>  
+                                    <b style="font-size: 12px;" class="lh-1 py-1 rounded-pill px-2 d-inline-block text-center text-white bg-danger position-absolute top-0 start-100 translate-middle"> {% if total_items > 0 %}{{ total_items }}{% else %}0{% endif %} </b> 
+                                </a>
+                                {% endwith %}
+                            {% else %}
+                                <a href="{% url 'products:create' %}" class="btn btn-light">
+                                    <i class="fa fa-upload"></i> Upload a Product 
+                                </a>
+                            {% endif %}
+                        </div>
+                        
+                        {% if request.user.is_authenticated %}
+                        <div class="d-inline-block position-relative align-middle me-2">
+                            {% if request.user.is_customer %}
+                            <a href="{% url 'accounts:customer' %}" class="btn btn-light">
+                                <i class="fa fa-user"></i> My Account
+                            </a>
+                            {% else %}
+                            <a href="{% url 'accounts:vendor' %}" class="btn btn-light">
+                                <i class="fa fa-bars"></i> Dashboard
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <nav class="navbar navbar-light navbar-expand-md border-bottom">
+        <div class="container"> 
+            <button class="navbar-toggler border" type="button" data-bs-toggle="collapse" data-bs-target="#navbarmenu" aria-expanded="false" aria-label="Toggle navigation" aria-controls="navbarmenu"> 
+                <span class="navbar-toggler-icon"> </span> 
+            </button>
+            <div class="collapse navbar-collapse" id="navbarmenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item"> <a class="nav-link ps-0" href="{% url 'home' %}"> Home </a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'products:list' %}">Products</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'accounts:vendors' %}">Artists</a> </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    {% if not request.user.is_authenticated %}
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'accounts:login' %}">Login</a></li> 
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'accounts:customer_signup' %}">Register</a></li>
+                    {% else %}
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

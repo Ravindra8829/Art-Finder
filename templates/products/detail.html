@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+
+{% include 'partials/_alerts.html' %}
+
+<section class="padding-y">
+    <div class="container">
+        <div class="row">
+            <aside class="col-lg-6">
+                <article class="gallery-wrap">
+                    <div class="img-big-wrap img-thumbnail">
+                        <img height="560" src="{{ product.image.url }}"> 
+                    </div>
+                </article>
+            </aside>
+            <main class="col-lg-6">
+                <article class="ps-lg-3">
+                    <h4 class="title text-dark">{{ product.name }}</h4>
+                    <div class="rating-wrap my-3">
+                        <div class="rating-star">
+                            <span>
+                                <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1%}-half-o{% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.average_review < 1.5 %}-o{% elif product.average_review >= 1.5 and product.average_review < 2%}-half-o{% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.average_review < 2.5 %}-o{% elif product.average_review >= 2.5 and product.average_review < 3%}-half-o{% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4%}-half-o{% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5%}-half-o{% endif %}" aria-hidden="true"></i>
+                            </span>
+                            <b class="label-rating text-warning">{{ product.average_review }}</b>
+                        </div>
+                        {% if product.is_available %}
+                        <i class="fa fa-check text-success"></i>
+                        <span class="label-rating text-success">in Stock</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <var class="price h5">&#8358;{{ product.price }}</var>
+                    </div>
+
+                    {{ product.description|linebreaks }}
+
+                    <hr>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                        <form action="{% url 'carts:cart_add' product.id %}" method="post">
+                            {% csrf_token %}
+                            {{ cart_product_form }}
+                            <button type="submit" class="btn btn-primary"> <i class="me-1 fa fa-shopping-cart"></i> Add to cart </button>
+                        </form></div>
+                    </div>
+                </article>
+            </main>
+        </div>
+
+        <div class="row my-5">
+            <div class="col-md-8">
+                {% if user.is_authenticated %}
+                    {% if user_review is not None %}
+                        <div class="card mb-5 bg-light">
+                            <div class="card-body">
+                                <blockquote>
+                                    <div class="icontext"> 
+                                        <div class="text">
+                                            <h5 class="mb-1">Your Review</h5>
+                                            <div class="rating-wrap">
+                                                <div class="rating-star">
+                                                    <span>
+                                                        <i class="fa fa-star{% if user_review.rating == 0.5 %}-half-o{% elif user_review.rating < 1%}-o{% endif %}" aria-hidden="true"></i>
+                                                        <i class="fa fa-star{% if user_review.rating == 1.5 %}-half-o{% elif user_review.rating < 2%}-o{% endif %}" aria-hidden="true"></i>
+                                                        <i class="fa fa-star{% if user_review.rating == 2.5 %}-half-o{% elif user_review.rating < 3%}-o{% endif %}" aria-hidden="true"></i>
+                                                        <i class="fa fa-star{% if user_review.rating == 3.5 %}-half-o{% elif user_review.rating < 4%}-o{% endif %}" aria-hidden="true"></i>
+                                                        <i class="fa fa-star{% if user_review.rating == 4.5 %}-half-o{% elif user_review.rating < 5%}-o{% endif %}" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <small class="text-muted">Reviewed on {{ user_review.updated }} </small> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <h6>{{ user_review.subject }}</h6>
+                                        <p>{{ user_review.content|linebreaks }}</p>
+                                    </div>
+                                </blockquote>
+                            </div>
+                        </div>
+                    {% else %}
+                        <h5 id="review">Write Your Review</h5>
+                        <p class="p-0 m-0"> How do you rate this product? </p>
+                        <form action="." method="POST" class="mb-5" novalidate>
+                            {% csrf_token %}
+                            <div class="rate">
+                                <input type="radio" name="rating" id="rating10" value="5" required><label for="rating10" title="5"></label>
+                                <input type="radio" name="rating" id="rating9" value="4.5" required><label for="rating9" title="4.5" class="half"></label>
+                                <input type="radio" name="rating" id="rating8" value="4" required><label for="rating8" title="4"></label>
+                                <input type="radio" name="rating" id="rating7" value="3.5" required><label for="rating7" title="3.5" class="half"></label>
+                                <input type="radio" name="rating" id="rating6" value="3" required><label for="rating6" title="3"></label>
+                                <input type="radio" name="rating" id="rating5" value="2.5" required><label for="rating5" title="2.5" class="half"></label>
+                                <input type="radio" name="rating" id="rating4" value="2" required><label for="rating4" title="2"></label>
+                                <input type="radio" name="rating" id="rating3" value="1.5" required><label for="rating3" title="1.5" class="half"></label>
+                                <input type="radio" name="rating" id="rating2" value="1" required><label for="rating2" title="1"></label>
+                                <input type="radio" name="rating" id="rating1" value="0.5" required><label for="rating1" title="0.5" class="half"></label>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="id_subject">Subject:</label>
+                                <input type="text" name="subject" maxlength="100" placeholder="Enter your subject" class="form-control {% if review_form.subject.errors %}is-invalid{% endif %}" required id="id_subject" {% if review_form.subject.value != None %}value="{{ review_form.subject.value|stringformat:'s' }}"{% endif %}>
+                                {% for error in review_form.subject.errors %}
+                                <div class="invalid-feedback">
+                                    {{ error }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="id_content">Content:</label>
+                                <textarea name="content" rows="4" maxlength="500" class="form-control {% if review_form.content.errors %}is-invalid{% endif %}" required id="id_content" {% if review_form.content.value != None %}value="{{ review_form.content.value|stringformat:'s' }}"{% endif %}></textarea>
+                                {% for error in review_form.content.errors %}
+                                <div class="invalid-feedback">
+                                    {{ error }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <!-- only purchased users can submit review-->
+                            <input type="submit" value="Submit Review" class="btn btn-primary">
+                        </form>
+                    {% endif %}
+                {% else %}
+                <p>You need to be <a href="{% url 'accounts:login' %}?next={% url 'products:detail' product.slug %}#review">logged in</a> to review this Product.</p>
+                {% endif %}
+                <header class="section-heading">
+                    <h5>Customer Reviews</h5>
+                    <div class="rating-star">
+                        <span>
+                            <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1%}-half-o{% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 1.5 %}-o{% elif product.average_review >= 1.5 and product.average_review < 2%}-half-o{% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 2.5 %}-o{% elif product.average_review >= 2.5 and product.average_review < 3%}-half-o{% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4%}-half-o{% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5%}-half-o{% endif %}" aria-hidden="true"></i>
+                            <span>{{ product.count_review }} review{{ product.count_review|pluralize }}</span>
+                        </span>
+                    </div>
+                </header>
+                {% for review in reviews %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <blockquote class="border-bottom">
+                            {% if request.user.is_authenticated and not review.user == request.user %}
+                            <div class="float-lg-end d-flex mb-3">
+                                <span class="thumbs" id="thumbs" data-value="{{ review.id }}" data-action="add"></span>
+                                <div class="btn-group d-inline-flex me-2"> 
+                                    <button data-review="{{ review.id }}" data-action="thumbsup" class="btn btn-light btn-sm float-end thumbaction" value="thumbsup" data-bs-toggle="tooltip" data-bs-title="I like this" role="button" id="thumbsup"> 
+                                        <i class="fa fa-thumbs-up" id="thumbsup"></i> 
+                                        <span id="up">{{ review.thumbsup }}</span>
+                                    </button> 
+                                    <button data-review="{{ review.id }}" data-action="thumbsdown" class="btn btn-light btn-sm float-end thumbaction" value="thumbsdown" data-bs-toggle="tooltip" data-bs-title="I dislike this" id="thumbsdown"> 
+                                        <i class="fa fa-thumbs-down" id="thumbsdown"></i> 
+                                        <span id="down">{{ review.thumbsdown }}</span>
+                                    </button>
+                                </div>
+                                <!-- <span class="thumbs" id="thumbs" data-value="{{ review.id }}" data-action="add"></span>
+                                <div class="btn-group d-inline-flex me-2"> 
+                                    <button data-review="{{ review.id }}" data-action="thumbsup" class="btn btn-light btn-sm float-end thumbaction" value="thumbsup" data-bs-toggle="tooltip" data-bs-title="I like this" role="button" id="thumbsup"> 
+                                        <i class="fa fa-thumbs-up" id="thumbsup"></i> 
+                                        <span id="up">{{ review.thumbsup }}</span>
+                                    </button> 
+                                    <button data-review="{{ review.id }}" data-action="thumbsdown" class="btn btn-light btn-sm float-end thumbaction" value="thumbsdown" data-bs-toggle="tooltip" data-bs-title="I dislike this" id="thumbsdown"> 
+                                        <i class="fa fa-thumbs-down" id="thumbsdown"></i> 
+                                        <span id="down">{{ review.thumbsdown }}</span>
+                                    </button>
+                                </div> -->
+                            </div>
+                            {% endif %}
+                            <div class="icontext"> 
+                                <div class="text">
+                                    <h6 class="mb-1">{{ review.user.get_full_name|default:review.user.username|title }}</h6>
+                                    <div class="rating-wrap">
+                                        <div class="rating-star">
+                                            <span>
+                                                <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1%}-o{% endif %}" aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2%}-o{% endif %}" aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3%}-o{% endif %}" aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4%}-o{% endif %}" aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5%}-o{% endif %}" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <small class="text-muted">Reviewed on {{ review.updated }} </small> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <h6>{{ review.subject }}</h6>
+                                <p>{{ review.content|linebreaks }}</p>
+                            </div>
+                        </blockquote>
+                        <p class="mb-0"><i class="me-2 text-success fa fa-thumbs-up"></i> {{ review.thumbsup }} person{{ review.thumbsup|pluralize }} found this review useful</p>
+                    </div>
+                </div>
+                {% empty %} 
+                <p>No review yet. Be the first to review this product.</p>
+                {% endfor %}
+            </div>
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="itemside mb-4">
+                            <div class="aside"> 
+                                <img src="{{ product.vendor.vendor.image.url }}" width="60" height="60" class="img-sm img-thumbnail"> 
+                            </div>
+                            <div class="info"> 
+                                <span class="h6 title">{{ product.vendor.vendor.company_name }} {% if product.vendor.vendor.is_verified %}<i class="fa fa-check text-primary"></i>{% endif %}</span>
+                                <small class="text-muted">Selling {{ product.vendor.products.count }} product{{ product.vendor.products.count|pluralize }}</small>
+                                <p><i class="fa fa-map-marker"></i> {{ product.vendor.vendor.address }}, {{ product.vendor.vendor.state }}</p>
+                            </div>
+                        </div>
+                        <p>{{ product.vendor.vendor.about|truncatechars:280 }}</p>
+                        <a href="{% url 'accounts:vendor_profile' product.vendor.vendor.user.username %}" class="btn w-100 btn-outline-primary">Visit store</a>
+                    </div>
+                </div>
+
+                {% if similar_products %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Related Products</h5>
+                        {% for p in similar_products %}
+                        <article class="itemside mb-3"> 
+                            <a href="{{ p.get_absolute_url }}" class="aside">
+                                <img src="{{ p.image.url }}" class="img-md img-thumbnail">
+                            </a>
+                            <div class="info"> 
+                                <a href="{{ p.get_absolute_url }}" class="title mb-1">{{ p.name }}</a>
+                                <div class="price mb-1">&#8358;{{ p.price }}</div>
+                                <!-- <a href="#" class="btn btn-outline-primary btn-sm"> Add to cart </a> -->
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %} 
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function () {
+    let thumbBtns = document.getElementsByClassName("thumbaction");
+    for (let i = 0; i < thumbBtns.length; i++) {
+        thumbBtns[i].addEventListener('click', function(e){
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                // URL to send the post information to
+                url: "{% url 'products:vote_review' %}",
+                // data to be sent across to django view
+                data: {
+                    // get the id of the review in question
+                    reviewid: this.dataset.review,
+                    // capture the value of the button whether thumbsup or thumbsdown
+                    button: this.dataset.action,
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    action: "thumbs",
+                },
+                success: function(json) {
+                    // update data returned from Django
+                    document.getElementById("up").innerHTML = json["up"]
+                    document.getElementById("down").innerHTML = json["down"]
+                    // $("#fathumbs").removeClass("text-primary");
+                    // $("#fathumbs").addClass("text-primary");
+                },
+                error: function(xhr, errmsg, err) {}
+            });
+        });
+    }
+})
+
+
+    // $(document).ready(function () {
+    //     $('.thumbaction').click(function(e) {
+    //         // get the id of the review in question
+    //         var reviewid = document.getElementById("thumbs").getAttribute("data-value");
+    //         // capture the value of the button whether thumbsup or thumbsdown
+    //         var button = $(this).attr("value");
+    //         e.preventDefault();
+    //         $.ajax({
+    //             type: "POST",
+    //             // URL to send the post information to
+    //             url: "{% url 'products:vote_review' %}",
+    //             // data to be sent across to django view
+    //             data: {
+    //                 reviewid: reviewid,
+    //                 csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+    //                 action: "thumbs",
+    //                 button: button,
+    //             },
+    //             success: function(json) {
+    //                 // update data returned from Django
+    //                 document.getElementById("up").innerHTML = json["up"]
+    //                 document.getElementById("down").innerHTML = json["down"]
+    //                 // $("#fathumbs").removeClass("text-primary");
+    //                 // $("#fathumbs").addClass("text-primary");
+    //                 if (json["remove"] == "none") {
+    //                     $("#" + button).removeClass("text-primary");
+    //                 } else {
+    //                     $("#" + button).addClass("text-primary");
+    //                 }
+    //             },
+    //             error: function(xhr, errmsg, err) {}
+    //         });
+    //     });
+    // });
+</script>
+
+{% endblock %}

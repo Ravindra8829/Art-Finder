@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% include 'partials/_alerts.html' %}
+
+<section class="bg-dark py-3">
+    <div class="container">
+        <div class="my-5">
+            <h1 class="text-white"> Best art work <br> from different artist in our store </h1>
+            <p class="lead text-white">Amazing Paintings, Reasonable Prices, Excellent Service</p>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'accounts:vendor_signup' %}" class="btn btn-warning"> Become a Artist </a>
+            <a href="{% url 'accounts:customer_signup' %}" class="btn btn-light"> Register as a Customer </a>
+            {% else %}
+            <a href="{% url 'products:list' %}" class="btn btn-warning"> Browse Products </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <h3 class="mb-4">New products</h3>
+        <div class="row">
+            {% for product in products %}
+                {% include "partials/_product_grid.html" %}
+            {% empty %}
+                <p>No products on sale</p>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

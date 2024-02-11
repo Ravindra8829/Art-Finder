@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Verified vendors{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h4 class="title-page">Verified vendors</h4>
+</div>
+
+<div class="container">
+    <div class="row">
+        <main class="col-lg-12">
+            <div class="row">
+                {% for vendor in vendors %}
+                <div class="col-lg-4">
+                    {% include "partials/_vendor_card.html" %}
+                </div>
+                {% empty %}
+                    <p>There are currently no verified vendors.</p>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+</div>
+
+{% endblock %}

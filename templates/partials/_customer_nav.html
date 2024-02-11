@@ -1,0 +1,10 @@
+<aside class="col-lg-3">
+<nav class="nav flex-lg-column nav-pills mb-4">
+    <a class="nav-link {% url 'accounts:customer' as customer_url %}{% if request.get_full_path == customer_url %}active{% endif %}" href="{% url 'accounts:customer' %}">My Account</a>
+    <a class="nav-link {% url 'accounts:orders' as orders_url %}{% if request.get_full_path == orders_url %}active{% endif %}" href="{% url 'accounts:orders' %}">Orders history</a>
+    <!-- <a class="nav-link {% url 'accounts:wishlist' as wishlist_url %}{% if request.get_full_path == wishlist_url %}active{% endif %}" href="{% url 'accounts:wishlist' %}">My wishlist</a>
+    <a class="nav-link {% url 'accounts:addresses' as addresses_url %}{% if request.get_full_path == addresses_url %}active{% endif %}" href="{% url 'accounts:addresses' %}">Addresses</a> -->
+    <a class="nav-link {% url 'accounts:password_change' as password_change_url %}{% if request.get_full_path == password_change_url %}active{% endif %}" href="{% url 'accounts:password_change' %}">Change Password</a>
+    <a class="nav-link" href="{% url 'accounts:logout' %}">Log out</a>
+</nav>
+</aside>

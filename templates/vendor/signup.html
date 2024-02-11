@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign up as {{ user_type }}{% endblock %}
+
+{% block content %}
+
+{% include 'partials/_alerts.html' %}
+
+<section class="py-3 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 mx-auto">
+                <div class="card my-4 p-3">
+                    <article class="card-body">
+                        <h4 class="mb-4">Create {{ user_type }} account</h4>
+                        <form method="post" action="" novalidate enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% include "partials/_form_errors.html" %}
+                            <div class="row gx-3">
+                                <div class="col-6 mb-4"> 
+                                    <label class="form-label" for="id_username">Username:</label>
+                                    <input type="text" name="username" autocapitalize="none" maxlength="150" placeholder="Enter your username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" required id="id_username" {% if form.username.value != None %}value="{{ form.username.value|stringformat:'s' }}"{% endif %}>
+                                    {% for error in form.username.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %} 
+                                </div>
+                                <div class="col-6 mb-4"> 
+                                    <label class="form-label" for="id_email">Email:</label> 
+                                    <input type="email" name="email" autocapitalize="none" maxlength="150" placeholder="Enter your email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" required id="id_email" {% if form.email.value != None %}value="{{ form.email.value|stringformat:'s' }}"{% endif %}>
+                                    {% for error in form.email.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-6 mb-3"> 
+                                    <label for="id_password1" class="form-label">Password:</label> 
+                                    <input type="password" name="password1" autocomplete="new-password" required id="id_password1" class="form-control {% if form.password1.errors %}is-invalid{% endif %}" placeholder="******">
+                                    {% for error in form.password1.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %} 
+                                </div>
+                                <div class="col-6 mb-3"> 
+                                    <label for="id_password2" class="form-label">Confirm password:</label> 
+                                    <input type="password" name="password2" autocomplete="new-password" required id="id_password2" class="form-control {% if form.password2.errors %}is-invalid{% endif %}" placeholder="******">
+                                    {% for error in form.password2.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %} 
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row gx-3">
+                                <div class="col-8 mb-3"> 
+                                    <label class="form-label" for="id_company_name">Vendor name:</label> 
+                                    <input type="text" name="company_name" maxlength="50" placeholder="Enter your vendor company name" class="form-control {% if form.company_name.errors %}is-invalid{% endif %}" required id="id_company_name" {% if form.company_name.value != None %}value="{{ form.company_name.value|stringformat:'s' }}"{% endif %}>
+                                    {% for error in form.company_name.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-4 mb-3"> 
+                                    <label class="form-label" for="id_phone_number">Phone number</label> 
+                                    <input type="text" name="phone_number" maxlength="50" placeholder="08012345678" class="form-control {% if form.phone_number.errors %}is-invalid{% endif %}" required id="id_phone_number" {% if form.phone_number.value != None %}value="{{ form.phone_number.value|stringformat:'s' }}"{% endif %}>
+                                    {% for error in form.phone_number.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %} 
+                                </div>
+                                <div class="col-8 mb-3"> 
+                                    <label class="form-label" for="id_address">Address:</label> 
+                                    <input type="text" name="address" maxlength="200" placeholder="Vendor address" class="form-control {% if form.address.errors %}is-invalid{% endif %}" required id="id_address" {% if form.address.value != None %}value="{{ form.address.value|stringformat:'s' }}"{% endif %}>
+                                    {% for error in form.address.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %} 
+                                </div>
+                                <div class="col-4 mb-3"> 
+                                    <label class="form-label" for="id_state">State:</label> 
+                                    <input type="text" name="state" maxlength="200" placeholder="Location" class="form-control {% if form.state.errors %}is-invalid{% endif %}" required id="id_state" {% if form.state.value != None %}value="{{ form.state.value|stringformat:'s' }}"{% endif %}>
+                                    {% for error in form.state.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %} 
+                                </div>
+                                <div class="col-12 mb-3"> 
+                                    <label class="form-label" for="id_image">Store image:</label> 
+                                    <input type="file" name="image" accept="image/*" class="form-control {% if form.image.errors %}is-invalid{% endif %}" required id="id_image">
+                                    {% for error in form.image.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %} 
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label" for="id_about">About your Store:</label> 
+                                    <textarea class="form-control" name="about" required id="id_about"></textarea>
+                                    {% for error in form.about.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-4 align-items-center">
+                                <div class="col-auto"> 
+                                    <button class="btn btn-success" type="submit">Register now</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <p class="mb-0">Already have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
